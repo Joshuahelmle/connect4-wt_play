@@ -1,5 +1,11 @@
-@()
+@(content : String)
 
 @main("Welcome to Play") {
-  <h1>Welcome to Play!</h1>
+  <h1>Welcome to Connect 4!</h1>
+  @Html(content)<br>
+  <form action="/game/controller" method="post">
+    <label for="inputfield">Ihre Eingabe:</label>
+    <input type="text" id="inputField" name="inputField"></input>
+    <input type="submit" value="Submit">
+  </form>
 }

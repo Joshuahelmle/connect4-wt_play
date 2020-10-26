@@ -1,5 +1,12 @@
 package controllers
 
+import com.google.inject.Guice
+import de.htwg.se.connect4.Connect4Module
+import de.htwg.se.connect4.aview.Tui
+import de.htwg.se.connect4.aview.gui.SwingGui
+import de.htwg.se.connect4.controller.controllerComponent.ControllerInterface
+import de.htwg.se.connect4.controller.controllerComponent.controllerBaseImpl.InitializationState
+import de.htwg.se.connect4.model.boardComponent.BoardInterface
 import javax.inject._
 import play.api._
 import play.api.mvc._
@@ -11,6 +18,16 @@ import play.api.mvc._
 @Singleton
 class HomeController @Inject()(val controllerComponents: ControllerComponents) extends BaseController {
 
+
+  val injector = Guice.createInjector(new Connect4Module)
+  var board = injector.getInstance(classOf[BoardInterface])
+
+  val controller = injector.getInstance(classOf[ControllerInterface])
+  val tui = new Tui(controller)
+
+  controller.notifyObservers
+
+
   /**
    * Create an Action to render an HTML page.
    *
@@ -19,6 +36,9 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
    * a path of `/`.
    */
   def index() = Action { implicit request: Request[AnyContent] =>
-    Ok(views.html.index())
+    val string = controller.getWelcomeString;
+    Ok(views.html.index(string))
   }
+
+
 }
