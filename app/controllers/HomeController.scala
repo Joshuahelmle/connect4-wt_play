@@ -36,7 +36,7 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
    * a path of `/`.
    */
   def index() = Action { implicit request: Request[AnyContent] =>
-    val string = controller.getWelcomeString;
+    val string = controller.getWelcomeString
     Ok(views.html.index(string))
   }
 
