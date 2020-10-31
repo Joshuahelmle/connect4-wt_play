@@ -1,3 +1,4 @@
+@import de.htwg.se.connect4.model.boardComponent.boardBaseImpl.Color
 @(controller:de.htwg.se.connect4.controller.controllerComponent.ControllerInterface)
 
 @main("Welcome to Play") {
@@ -6,19 +7,20 @@
         <div class="board">
             @for(row <- 0 until controller.sizeOfRows) {
                 @for(col <- 0 until controller.sizeOfCols) {
+
                     <span class="cell">
-                        <span>
-                            @if(col == 0) {<br>}
+                        <span> @if(col == 0) {<br>}
                         @{if(controller.cell(row, col).isSet) {
-                             controller.cell(row,col).color
+                           if(controller.cell(row, col).color.equals(Color.RED)) {"r |"} else {"y |"}
                         } else {
-                            "-"
+                            " - |"
                         }
                          } </span>
                     </span>
                 }
             }
         </div>
+        <div> @{if(controller.getState.toString().equals("InGameState")) {controller.getPlayerDemandString} else {controller.stateString}}</div>
         <form action="/game/controller" method="post">
             <label for="inputfield">Ihre Eingabe:</label>
             <input type="text" id="inputField" name="inputField"></input>
