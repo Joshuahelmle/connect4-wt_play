@@ -28,8 +28,9 @@ class GameController @Inject()(val controllerComponents: ControllerComponents) e
     val input = body.asFormUrlEncoded.get("inputField").map(_.toString)
     controller.handle(input.head,controller.getBoard)
 
-    val html = views.html.index.render(controller.stateString.replace("\n", "<br>"))
-    Ok(html)
+    //val html = views.html.index.render(controller.stateString.replace("\n", "<br>"))
+    //Ok(html)
+    Ok(views.html.connect4(controller))
   }
 
   def set(row: Int, col: Int) = Action { implicit request: Request[AnyContent] =>
