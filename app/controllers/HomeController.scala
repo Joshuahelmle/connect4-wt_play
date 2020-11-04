@@ -20,12 +20,12 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
 
 
   val injector = Guice.createInjector(new Connect4Module)
+  val controller = injector.getInstance(classOf[ControllerInterface])
   var board = injector.getInstance(classOf[BoardInterface])
 
-  val controller = injector.getInstance(classOf[ControllerInterface])
-  val tui = new Tui(controller)
 
-  controller.notifyObservers
+
+
 
 
   /**
@@ -38,6 +38,10 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
   def index() = Action { implicit request: Request[AnyContent] =>
     val string = controller.getWelcomeString
     Ok(views.html.index(string))
+  }
+
+  def rules() = Action { implicit request: Request[AnyContent] =>
+    Ok(views.html.rules())
   }
 
 

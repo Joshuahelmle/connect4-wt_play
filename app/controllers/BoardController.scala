@@ -29,7 +29,7 @@ class BoardController @Inject()(val controllerComponents: ControllerComponents) 
    * a path of `/`.
    */
   def index() = Action { implicit request: Request[AnyContent] =>
-    Ok(controller.boardToString)
+    Ok(controller.getBoard.getBoardAsString(controller.getBoard.getCells))
   }
 
   def set(row: Int, col: Int) = Action { implicit request: Request[AnyContent] =>
