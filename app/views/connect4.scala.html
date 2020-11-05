@@ -1,9 +1,17 @@
 @import de.htwg.se.connect4.model.boardComponent.boardBaseImpl.Color
-@(controller:de.htwg.se.connect4.controller.controllerComponent.ControllerInterface)
+@(controller:de.htwg.se.connect4.controller.controllerComponent.ControllerInterface, id:Int)
 
 @main("Welcome to Play") {
     <h1>Connect 4</h1>
     <div class="container">
+        @if(controller.getPlayers.size != 2){
+            <p>Please enter your name.</p>
+            <form action="/games/@id/init" method="post">
+                <label for="inputfield">Ihre Eingabe:</label>
+                <input type="text" id="inputField" name="inputField"></input>
+                <input type="submit" value="Submit">
+            </form>
+        } else {
         <div class="board">
             @for(row <- 0 until controller.sizeOfRows) {
                 @for(col <- 0 until controller.sizeOfCols) {
@@ -21,10 +29,11 @@
             }
         </div>
         <div> @{if(controller.getState.toString().equals("InGameState")) {controller.getPlayerDemandString} else {controller.stateString}}</div>
-        <form action="/game/controller" method="post">
+        <form action="/games/@id" method="post">
             <label for="inputfield">Ihre Eingabe:</label>
             <input type="text" id="inputField" name="inputField"></input>
             <input type="submit" value="Submit">
         </form>
     </div>
+}
 }

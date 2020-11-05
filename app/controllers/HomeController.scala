@@ -19,13 +19,6 @@ import play.api.mvc._
 class HomeController @Inject()(val controllerComponents: ControllerComponents) extends BaseController {
 
 
-  val injector = Guice.createInjector(new Connect4Module)
-  val controller = injector.getInstance(classOf[ControllerInterface])
-  var board = injector.getInstance(classOf[BoardInterface])
-
-
-
-
 
 
   /**
@@ -36,8 +29,7 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
    * a path of `/`.
    */
   def index() = Action { implicit request: Request[AnyContent] =>
-    val string = controller.getWelcomeString
-    Ok(views.html.index(string))
+    Ok(views.html.index())
   }
 
   def rules() = Action { implicit request: Request[AnyContent] =>

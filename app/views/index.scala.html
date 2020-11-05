@@ -1,11 +1,5 @@
-@(content : String)
-
 @main("Welcome to Play") {
   <h1>Welcome to Connect 4!</h1>
-  @Html(content)<br>
-  <form action="/game/controller" method="post">
-    <label for="inputfield">Ihre Eingabe:</label>
-    <input type="text" id="inputField" name="inputField"></input>
-    <input type="submit" value="Submit">
-  </form>
+  You can read the <a href="/rules">rules here</a><br>
+  Or simply start <a href="/games">playing!</a>
 }

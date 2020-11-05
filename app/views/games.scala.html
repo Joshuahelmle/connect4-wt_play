@@ -1,0 +1,22 @@
+@import de.htwg.se.connect4.controller.controllerComponent.ControllerInterface
+@import de.htwg.se.connect4.aview.Tui
+@(games:Map[Int, (ControllerInterface, Tui)])
+
+@main("Welcome to Play") {
+    <h1>Lobby</h1>
+    @if(games.isEmpty){
+    <p>There are currently no open Games, be the first to start playing!</p><br>
+        <a href="/games/new">Start new Game</a>
+    } else {
+        <p>
+            These are the currently active games, join one if you want!<br>
+            You can also create a <a href="/games/new">new</a> one.
+        </p>
+        <ul>
+            @for((key,game) <- games){
+                <li>Checkout Game #@key <a href="/games/@key">here</a></li>
+            }
+        </ul>
+    }
+
+}
