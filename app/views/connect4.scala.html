@@ -15,17 +15,19 @@
         <div class="board">
             @for(row <- 0 until controller.sizeOfRows) {
                 @for(col <- 0 until controller.sizeOfCols) {
-
-                    <span class="cell">
-                        <span> @if(col == 0) {<br>}
-                        @{if(controller.cell(row, col).isSet) {
-                           if(controller.cell(row, col).color.equals(Color.RED)) {"r |"} else {"y |"}
-                        } else {
-                            " - |"
+                    @{if(controller.cell(row, col).isSet){
+                        if(controller.cell(row, col).color.equals(Color.RED)){
+                          <span class="cell red">r |</span>
+                        }else {
+                          <span class="cell yellow">y |</span>
                         }
-                         } </span>
-                    </span>
+                    } else {
+                        <span class="cell unset"> - |</span>
+                    }
+                    }
+                    
                 }
+                    <br>
             }
         </div>
         <div> @{if(controller.getState.toString().equals("InGameState")) {controller.getPlayerDemandString} else {controller.stateString}}</div>
