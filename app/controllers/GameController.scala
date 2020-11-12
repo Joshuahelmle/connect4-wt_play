@@ -12,7 +12,6 @@ import play.twirl.api.Html
 @Singleton
 class GameController @Inject()(val controllerComponents: ControllerComponents) extends BaseController {
   var gameIdx : Int = 0
-  //var games = Map[Int, (ControllerInterface, Tui)]();
   var games : Map[Int, (ControllerInterface, Tui)] = Map.empty[Int, (ControllerInterface, Tui)]
 
   /**
@@ -31,10 +30,6 @@ class GameController @Inject()(val controllerComponents: ControllerComponents) e
     if (controller.getPlayers.size == 0){
       val html = views.html.connect4.render(controller,idx)
       Ok(html)
-
-    //if (controller.getPlayers.size == 1) {
-    //  val html = views.html.index.render(controller.stateString.replace("\n", "<br>"))
-    //  Ok(html)
     } else {
       val body: AnyContent = request.body
       val input = body.asFormUrlEncoded.get("inputField").map(_.toString)

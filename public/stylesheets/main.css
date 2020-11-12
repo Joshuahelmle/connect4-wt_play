@@ -34,4 +34,34 @@ body {
     background-size: 100%;
 
 }
+.boardrow {
+    height:15%;
+    margin: 2ex;
+}
+
+.cell:empty:before {
+    content: "\200b"; /* unicode zero width space character */
+}
+
+.cell {
+    display: inline-block;
+    vertical-align: top;
+    width : 13%;
+    height: 15%;
+    min-height : 15%;
+    border: 1px solid black;
+    margin: 0;
+    color: azure;
+    text-align: center;
+}
+
+.cell.red {
+    border-color : black;
+    background-color: darkred;
+}
+
+.cell.yellow {
+    border-color: black;
+    background-color: goldenrod;
+}
 
