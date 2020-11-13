@@ -4,6 +4,7 @@
 
 @main("Welcome to Play") {
     <h1>Lobby</h1>
+    <div class="container">
     @if(games.isEmpty){
     <p>There are currently no open Games, be the first to start playing!</p><br>
         <a href="/games/new">Start new Game</a>
@@ -18,5 +19,5 @@
             }
         </ul>
     }
-
+    </div>
 }
