@@ -14,8 +14,19 @@
             You can also create a <a href="/games/new">new</a> one.
         </p>
         <ul>
-            @for((key,game) <- games){
-                <li>Checkout Game #@key <a href="/games/@key">here</a></li>
+            @for((key,game) <- games) {
+                <div class="container">
+                    <div class="row">
+                <div class="card" style="width: 18rem;">
+                    <img src="..." class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">Game #@key</h5>
+                        <p class="card-text">@for(player <- games(key)._1.getPlayers) {<p>@player.playerName </p>} </p>
+                        <a href="/games/@key" class="btn btn-primary">Join game</a>
+                    </div>
+                </div>
+                    </div>
+                </div>
             }
         </ul>
     }
