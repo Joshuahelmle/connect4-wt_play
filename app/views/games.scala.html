@@ -14,9 +14,10 @@
             You can also create a <a href="/games/new">new</a> one.
         </p>
         <ul>
+            <div class="container">
+                <div class="row">
             @for((key,game) <- games) {
-                <div class="container">
-                    <div class="row">
+                <div class="col">
                 <div class="card" style="width: 18rem;">
                     <img src="..." class="card-img-top" alt="...">
                     <div class="card-body">
@@ -25,9 +26,10 @@
                         <a href="/games/@key" class="btn btn-primary">Join game</a>
                     </div>
                 </div>
-                    </div>
                 </div>
             }
+                </div>
+        </div>
         </ul>
     }
     </div>
