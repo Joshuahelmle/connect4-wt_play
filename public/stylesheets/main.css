@@ -36,6 +36,7 @@ body {
 
 }
 .boardrow {
+    display: flex;
     height:15%;
     margin: 2ex;
 }
@@ -47,11 +48,12 @@ body {
 .cell {
     display: inline-block;
     vertical-align: top;
-    width : 13%;
+    width : calc(100%/7);
     height: 15%;
     min-height : 15%;
     border: 1px solid black;
     margin: 0;
+    padding: 0;
     color: azure;
     text-align: center;
 }

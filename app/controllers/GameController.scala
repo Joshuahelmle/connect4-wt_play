@@ -71,5 +71,34 @@ class GameController @Inject()(val controllerComponents: ControllerComponents) e
 
   }
 
+  def restartGame(idx : Int) = Action { implicit request : Request[AnyContent] =>
+    val tuple = games(idx)
+    val tui = tuple._2
+    val controller = tuple._1
+    controller.createNewBoard(controller.sizeOfRows, controller.sizeOfCols)
+    Ok(views.html.connect4.render(controller,idx))
+  }
+
+  def undoTurn(idx : Int) = Action { implicit request : Request[AnyContent] =>
+    val tuple = games(idx)
+    val tui = tuple._2
+    val controller = tuple._1
+    controller.undo()
+    Ok(views.html.connect4.render(controller,idx))
+  }
+
+  def redoTurn(idx : Int) = Action { implicit request : Request[AnyContent] =>
+    val tuple = games(idx)
+    val tui = tuple._2
+    val controller = tuple._1
+    controller.redo
+    Ok(views.html.connect4.render(controller,idx))
+  }
+
+  def quitGame(idx: Int) = Action { implicit request : Request[AnyContent] =>
+    games -= (idx)
+    Redirect(s"/games")
+  }
+
 
 }

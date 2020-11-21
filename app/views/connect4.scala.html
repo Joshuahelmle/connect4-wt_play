@@ -12,21 +12,23 @@
                 <input type="submit" value="Submit">
             </form>
         } else {
+            <div class="list-group list-group-horizontal">
+                <a role="button" class="btn btn-primary list-group-item list-group-item-action" href="/games/@id/restart">
+                   Restart Game
+                </a>
+                <a class="btn btn-primary list-group-item list-group-item-action flex-fill" href="/games/@id/quit" role="button">Quit Game</a>
+                <a class="btn btn-primary list-group-item list-group-item-action flex-fill disabled" role="button">Save Game</a>
+                <a class="btn btn-primary list-group-item list-group-item-action flex-fill" href="/games/@id/undo" role="button">Undo</a>
+                <a class="btn btn-primary list-group-item list-group-item-action flex-fill" href="/games/@id/redo" role="button">Redo</a>
+            </div>
         <div class="board">
             @for(row <- 0 until controller.sizeOfRows) {
                 <div class="boardrow">
                 @for(col <- 0 until controller.sizeOfCols) {
                     @{if(controller.cell(row, col).isSet){
-                        if(controller.cell(row, col).color.equals(Color.RED)){
-                          <span class="cell red">RED</span>
-                        }else {
-                          <span class="cell yellow">YELLOW</span>
-                        }
-                    } else {
-                        <span class="cell unset"></span>
+                        if(controller.cell(row, col).color.equals(Color.RED)){<span class="cell red">RED</span>}else {<span class="cell yellow">YELLOW</span>}
+                    } else {<span class="cell unset"></span>}
                     }
-                    }
-                    
                 }</div>
             }
         </div>
