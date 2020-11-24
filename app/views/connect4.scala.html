@@ -2,6 +2,7 @@
 @(controller:de.htwg.se.connect4.controller.controllerComponent.ControllerInterface, id:Int)
 
 @getPlayersColor(row:Int, col:Int) = @{controller.getPlayers(controller.getCurrentPlayerIndex).color.toString}
+@getSizeOfRows() = @{controller.sizeOfCols}
 
 @main("Welcome to Play") {
     <h1>Connect 4</h1>
@@ -29,7 +30,7 @@
                 @for(col <- 0 until controller.sizeOfCols) {
                     @if(controller.cell(row, col).isSet) {
                         if(controller.cell(row, col).color.equals(Color.RED)){<span class="cell red">RED</span>}else {<span class="cell yellow">YELLOW</span>}
-                    } else {<span id="cell-(@row @col)" class="cell unset" onclick="setColor('@getPlayersColor(row,col)', this)" ></span>}
+                    } else {<span id="cell-(@row,@col)" class="cell unset" onclick="setColor('@getPlayersColor(row,col)', this)" onmouseenter="zoomIn(event, this, @getSizeOfRows())" onmouseleave="zoomOut()" ></span>}
                 }</div>
             }
         </div>

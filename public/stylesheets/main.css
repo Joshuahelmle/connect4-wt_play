@@ -56,7 +56,10 @@ body {
     padding: 0;
     color: azure;
     text-align: center;
+    transition: transform .2s;
+    background-color: #f7eed5;
 }
+
 
 .cell.red {
     border-color : black;
