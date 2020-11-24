@@ -1,7 +1,7 @@
 @import de.htwg.se.connect4.model.boardComponent.boardBaseImpl.Color
 @(controller:de.htwg.se.connect4.controller.controllerComponent.ControllerInterface, id:Int)
 
-@getColor(row:Int, col:Int) = @{controller.cell(row, col).color.toString.toLowerCase}
+@getPlayersColor(row:Int, col:Int) = @{controller.getPlayers(controller.getCurrentPlayerIndex).color.toString}
 
 @main("Welcome to Play") {
     <h1>Connect 4</h1>
@@ -27,10 +27,9 @@
             @for(row <- 0 until controller.sizeOfRows) {
                 <div class="boardrow">
                 @for(col <- 0 until controller.sizeOfCols) {
-                    @{if(controller.cell(row, col).isSet) {
+                    @if(controller.cell(row, col).isSet) {
                         if(controller.cell(row, col).color.equals(Color.RED)){<span class="cell red">RED</span>}else {<span class="cell yellow">YELLOW</span>}
-                    } else {<span id="cell-(@row @col)" class="cell unset" onclick="setColor('@getColor(row,col)', this)" ></span>}
-                    }
+                    } else {<span id="cell-(@row @col)" class="cell unset" onclick="setColor('@getPlayersColor(row,col)', this)" ></span>}
                 }</div>
             }
         </div>
