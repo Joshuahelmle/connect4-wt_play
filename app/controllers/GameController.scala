@@ -4,7 +4,11 @@ import com.google.inject.{Guice, Injector}
 import de.htwg.se.connect4.Connect4Module
 import de.htwg.se.connect4.aview.Tui
 import de.htwg.se.connect4.controller.controllerComponent.ControllerInterface
+import de.htwg.se.connect4.controller.controllerComponent.controllerBaseImpl.State
+import de.htwg.se.connect4.model.boardComponent.BoardInterface
+import de.htwg.se.connect4.model.fileIoComponent.FileIoInterface
 import javax.inject.{Inject, Singleton}
+import play.api.libs.json.{JsNumber, JsString, Json}
 import play.api.mvc.{Action, AnyContent, BaseController, ControllerComponents, Request}
 import play.mvc.Results.redirect
 import play.twirl.api.Html
@@ -98,6 +102,50 @@ class GameController @Inject()(val controllerComponents: ControllerComponents) e
   def quitGame(idx: Int) = Action { implicit request : Request[AnyContent] =>
     games -= (idx)
     Redirect(s"/games")
+  }
+
+  def getJson(idx: Int)  = Action { implicit request : Request[AnyContent] =>
+    val game = games(idx)
+    val controller = game._1
+    val stateToSave = State(controller.getCurrentPlayerIndex, controller.getPlayers, controller.getState.toString())
+    val json = controllerToJson(game._1.getBoard, stateToSave)
+    Ok(json)
+  }
+
+  def controllerToJson(board: BoardInterface, state: State) = {
+    Json.obj(
+      "currentPlayerIndex" -> JsNumber(state.currentPlayerIndex),
+      "state" -> JsString(state.state),
+      "players" -> Json.toJson(
+        for {
+          index <- state.players.indices
+
+        } yield {
+          Json.obj(
+            "name" -> state.players(index).playerName,
+            "color" -> state.players(index).color,
+            "piecesLeft" -> state.players(index).piecesLeft,
+          )
+        }
+
+      ),
+      "board" -> Json.obj(
+        "row" -> JsNumber(board.sizeOfRows),
+        "col" -> JsNumber(board.sizeOfCols),
+        "cells" -> Json.toJson(
+          for {
+            row <- 0 until board.sizeOfRows
+            col <- 0 until board.sizeOfCols
+          } yield {
+            Json.obj(
+              "row" -> row,
+              "col" -> col,
+              "cell" -> Json.toJson(board.cell(row, col))
+            )
+          }
+        )
+      )
+    )
   }
 
 

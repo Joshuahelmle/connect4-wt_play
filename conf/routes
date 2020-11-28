@@ -13,6 +13,7 @@ GET     /games/:id/restart          controllers.GameController.restartGame(id : 
 GET     /games/:id/redo             controllers.GameController.redoTurn(id : Int)
 GET     /games/:id/undo             controllers.GameController.undoTurn(id : Int)
 GET     /games/:id/quit             controllers.GameController.quitGame(id: Int)
+GET     /games/:id/json             controllers.GameController.getJson(id: Int)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
