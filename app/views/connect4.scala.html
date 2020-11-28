@@ -41,8 +41,8 @@
                 <div class="boardrow">
                 @for(col <- 0 until controller.sizeOfCols) {
                     @if(controller.cell(row, col).isSet) {
-                        if(controller.cell(row, col).color.equals(Color.RED)){<span class="cell red">RED</span>}else {<span class="cell yellow">YELLOW</span>}
-                    } else {<span id="cell-(@row,@col)" class="cell unset" onclick="setColor('@getPlayersColor(row,col)', this)" onmouseenter="zoomIn(event, this, @getSizeOfRows(), @getPreviewCellIndex(col))" onmouseleave="zoomOut()" ></span>}
+                        @if(controller.cell(row, col).color.equals(Color.RED)){<span id="cell-(@row,@col)" class="cell red">RED</span>}else {<span class="cell yellow">YELLOW</span>}
+                    } else {<span id="cell-(@row,@col)" class="cell unset" onclick="setColor(@getPreviewCellIndex(col),@col)" onmouseenter="zoomIn(event, this, @getSizeOfRows(), @getPreviewCellIndex(col))" onmouseleave="zoomOut()" ></span>}
                 }</div>
             }
         </div>

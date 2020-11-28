@@ -45,7 +45,7 @@ class GameController @Inject()(val controllerComponents: ControllerComponents) e
     val body: AnyContent = request.body
     val input = body.asFormUrlEncoded.get("inputField").map(_.toString)
     tui.processInputLine(input.head, controller.getBoard)
-    Ok(views.html.connect4.render(controller,idx))
+    Redirect(s"/games/$idx")
   }
 
   def newGame() = Action {implicit request : Request[AnyContent] =>

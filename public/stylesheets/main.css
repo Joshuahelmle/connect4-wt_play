@@ -49,13 +49,15 @@ body {
     display: inline-block;
     vertical-align: top;
     width : calc(100%/7);
-    height: 15%;
-    min-height : 15%;
+    height: calc(100%/7);
+    min-height : 100px;
     border: 1px solid black;
+    border-radius: 50%;
     margin: 0;
     padding: 0;
     color: azure;
     text-align: center;
+    vertical-align: center;
     transition: transform .2s;
     background-color: #f7eed5;
 }
@@ -69,5 +71,13 @@ body {
 .cell.yellow {
     border-color: black;
     background-color: goldenrod;
+}
+
+.cell.scaled {
+    transform: scale(1.5);
+}
+
+.cell.preview {
+    filter: brightness(80%) saturate(60%);
 }
 

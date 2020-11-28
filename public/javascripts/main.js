@@ -1,39 +1,45 @@
 
+var player1 = true;
 
-function setColor(color, cell) {
-    document.getElementById(cell.id).classList.add(color === "red" ? "red" : "yellow")
+
+function setColor(row, col,preview = false) {
+    //document.getElementById(cell.id).style.backgroundColor = color;
+    //console.log(`cell-(${row},${col})`);
+    document.getElementById(`cell-(${row},${col})`).classList.add(player1 ? "red" : "yellow")
+    if(!preview) {
+        player1 = !player1;
+    }
 }
 
 function zoomIn(event, cell, sizeOfRows, previewRowIdx) {
-    var cells = document.getElementsByClassName("cell");
-    var colOfHoveredCell = cell.id.substr(cell.id.indexOf(",") + 1, 1);
-    var rowCounter = 0;
+    let cells = document.getElementsByClassName("cell");
+    let colOfHoveredCell = cell.id.substr(cell.id.indexOf(",") + 1, 1);
+    let rowCounter = 0;
 
-        for(var i = 0; i < cells.length; i++) {
-        var col = cells[i].id.substr(cells[i].id.indexOf(",") + 1, 1);
-        var currentRow = cells[i].id.substr(cells[i].id.indexOf(",") - 1, 1);
+        for(let i = 0; i < cells.length; i++) {
+        let col = cells[i].id.substr(cells[i].id.indexOf(",") + 1, 1);
+        let currentRow = cells[i].id.substr(cells[i].id.indexOf(",") - 1, 1);
         if (rowCounter.toString() === currentRow && colOfHoveredCell === col && rowCounter <= sizeOfRows) {
-            cells[i].style.transform = 'scale(1.5)';
+            cells[i].classList.add('scaled')
             rowCounter += 1;
         }
 
     }
 
-    var previewColIdx = cell.id.substr(cell.id.indexOf(",") + 1, 1);
-    var cellToBeHighlighted = document.getElementById("cell-(" + previewRowIdx + ","+ previewColIdx + ")");
+    let cellToBeHighlighted = document.getElementById("cell-(" + previewRowIdx + ","+ colOfHoveredCell + ")");
     cellToBeHighlighted.classList.replace("unset", "preview");
-    cellToBeHighlighted.style.backgroundColor = 'darkred';
+    setColor(previewRowIdx,colOfHoveredCell,true)
 
 
 }
 
 function zoomOut() {
-    var element = document.getElementsByClassName("cell");
-    for (var i = 0; i < element.length; i++) {
-        element[i].style.transform = "none";
-
-        if(element[i].className === "cell preview") {
-            element[i].style.backgroundColor = '#f7eed5';
+    let element = document.getElementsByClassName("cell");
+    for (let i = 0; i < element.length; i++) {
+        if(element[i].classList.contains('preview')){
+            element[i].classList.remove('preview', player1 ? 'red' : 'yellow');
+            element[i].classList.add('unset');
         }
+        element[i].classList.remove('scaled');
     }
 }
