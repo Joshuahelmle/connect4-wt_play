@@ -20,5 +20,7 @@ GET     /assets/*file               controllers.Assets.versioned(path="/public",
 
 GET /board                          controllers.BoardController.index
 
+
 POST /games/:id                     controllers.GameController.handle(id: Int)
-POST     /games/:id/init            controllers.GameController.initGame(id: Int)
+POST /games/:id/init                controllers.GameController.initGame(id: Int)
+POST /games/:id/:column             controllers.GameController.setCol(id : Int, column : Int)

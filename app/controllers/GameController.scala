@@ -5,10 +5,10 @@ import de.htwg.se.connect4.Connect4Module
 import de.htwg.se.connect4.aview.Tui
 import de.htwg.se.connect4.controller.controllerComponent.ControllerInterface
 import de.htwg.se.connect4.controller.controllerComponent.controllerBaseImpl.State
-import de.htwg.se.connect4.model.boardComponent.BoardInterface
+import de.htwg.se.connect4.model.boardComponent.{BoardInterface, CellInterface}
 import de.htwg.se.connect4.model.fileIoComponent.FileIoInterface
 import javax.inject.{Inject, Singleton}
-import play.api.libs.json.{JsNumber, JsString, Json}
+import play.api.libs.json.{JsNumber, JsString, Json, Writes}
 import play.api.mvc.{Action, AnyContent, BaseController, ControllerComponents, Request}
 import play.mvc.Results.redirect
 import play.twirl.api.Html
@@ -40,6 +40,23 @@ class GameController @Inject()(val controllerComponents: ControllerComponents) e
       tui.processInputLine(input.head, controller.getBoard)
       Ok(views.html.connect4.render(controller,idx))
   }
+  }
+
+  implicit val cellWrites = new Writes[CellInterface] {
+    def writes(cell: CellInterface) = Json.obj(
+      "isSet" -> cell.isSet,
+      "color" -> cell.color
+
+    )
+  }
+
+  def setCol(idx: Int, col : Int) = Action { implicit request : Request[AnyContent] =>
+    val tuple = games(idx)
+    val tui = tuple._2
+    val controller = tuple._1
+    controller.setCol(col)
+    val json = controllerToJson(controller)
+    Ok(json)
   }
 
   def initGame(idx : Int)  = Action { implicit request: Request[AnyContent] =>
@@ -108,11 +125,13 @@ class GameController @Inject()(val controllerComponents: ControllerComponents) e
     val game = games(idx)
     val controller = game._1
     val stateToSave = State(controller.getCurrentPlayerIndex, controller.getPlayers, controller.getState.toString())
-    val json = controllerToJson(game._1.getBoard, stateToSave)
+    val json = controllerToJson(controller)
     Ok(json)
   }
 
-  def controllerToJson(board: BoardInterface, state: State) = {
+  def controllerToJson(controller: ControllerInterface) = {
+    val board = controller.getBoard
+    val state = State(controller.getCurrentPlayerIndex, controller.getPlayers, controller.getState.toString())
     Json.obj(
       "currentPlayerIndex" -> JsNumber(state.currentPlayerIndex),
       "state" -> JsString(state.state),
@@ -147,6 +166,8 @@ class GameController @Inject()(val controllerComponents: ControllerComponents) e
       )
     )
   }
+
+
 
 
 }

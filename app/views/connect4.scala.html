@@ -40,10 +40,8 @@
             @for(row <- 0 until controller.sizeOfRows) {
                 <div class="boardrow">
                 @for(col <- 0 until controller.sizeOfCols) {
-                    @if(controller.cell(row, col).isSet) {
-                        @if(controller.cell(row, col).color.equals(Color.RED)){<span id="cell-(@row,@col)" class="cell red">RED</span>}else {<span class="cell yellow">YELLOW</span>}
-                    } else {<span id="cell-(@row,@col)" class="cell unset" onclick="setColor(@getPreviewCellIndex(col),@col)" onmouseenter="zoomIn(event, this, @getSizeOfRows(), @getPreviewCellIndex(col))" onmouseleave="zoomOut()" ></span>}
-                }</div>
+                    <span id="cell-row-@row-col-@col" class="cell unset" onclick="turn(@id, @col)" onmouseenter="zoomIn(@col, @id)" onmouseleave="zoomOut()"></span>
+                } </div>
             }
         </div>
         <div> @{if(controller.getState.toString().equals("InGameState")) {controller.getPlayerDemandString} else {controller.stateString}}</div>
@@ -55,5 +53,6 @@
             <hr>
             Zurück zur <a href="/games">Lobby</a>
     </div>
+
 }
 }
