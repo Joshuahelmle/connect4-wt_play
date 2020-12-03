@@ -7,6 +7,7 @@ function turn(id, col) {
 
 function redrawBoard(id) {
     $.get(`/games/${id}/json`).then(data => {
+        console.log(data);
         data.board.cells.forEach(cell => {
                 if (cell.cell.isSet) {
                     let span = $(`#cell-row-${cell.row}-col-${cell.col}`);
@@ -39,7 +40,8 @@ function zoomIn(col, id) {
     })
 }
 
-function zoomOut() {
+function zoomOut(id) {
     $('.scaled').removeClass('scaled');
     $('.preview').removeClass('preview').removeClass('red').removeClass('yellow').addClass('unset');
+    redrawBoard(id)
 }

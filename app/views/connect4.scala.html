@@ -40,18 +40,19 @@
             @for(row <- 0 until controller.sizeOfRows) {
                 <div class="boardrow">
                 @for(col <- 0 until controller.sizeOfCols) {
-                    <span id="cell-row-@row-col-@col" class="cell unset" onclick="turn(@id, @col)" onmouseenter="zoomIn(@col, @id)" onmouseleave="zoomOut()"></span>
+                    <span id="cell-row-@row-col-@col" class="cell unset" onclick="turn(@id, @col)" onmouseenter="zoomIn(@col, @id)" onmouseleave="zoomOut(@id)"></span>
                 } </div>
             }
         </div>
-        <div> @{if(controller.getState.toString().equals("InGameState")) {controller.getPlayerDemandString} else {controller.stateString}}</div>
+
+       <!-- <div> @{if(controller.getState.toString().equals("InGameState")) {controller.getPlayerDemandString} else {controller.stateString}}</div>
         <form action="/games/@id" method="post">
             <label for="inputfield">Ihre Eingabe:</label>
             <input type="text" id="inputField" name="inputField"></input>
             <input type="submit" value="Submit">
         </form>
             <hr>
-            Zurück zur <a href="/games">Lobby</a>
+            Zurück zur <a href="/games">Lobby</a> !-->
     </div>
 
 }
