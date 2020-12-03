@@ -1,6 +1,6 @@
 @import de.htwg.se.connect4.controller.controllerComponent.ControllerInterface
 @import de.htwg.se.connect4.aview.Tui
-@(games:Map[Int, (ControllerInterface, Tui)])
+@(games:Map[Int, GameController])
 
 @main("Welcome to Play") {
     <h1>Lobby</h1>
@@ -22,7 +22,7 @@
                     <img src="..." class="card-img-top" alt="...">
                     <div class="card-body">
                         <h5 class="card-title">Game #@key</h5>
-                        <p class="card-text">@for(player <- games(key)._1.getPlayers) {<p>@player.playerName </p>} </p>
+                        <p class="card-text">@for(player <- games(key).controller.getPlayers) {<p>@player.playerName </p>} </p>
                         <a href="/games/@key" class="btn btn-primary">Join game</a>
                     </div>
                 </div>

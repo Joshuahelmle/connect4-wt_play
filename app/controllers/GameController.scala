@@ -1,5 +1,6 @@
 package controllers
 
+import akka.actor._
 import com.google.inject.{Guice, Injector}
 import de.htwg.se.connect4.Connect4Module
 import de.htwg.se.connect4.aview.Tui
@@ -7,16 +8,32 @@ import de.htwg.se.connect4.controller.controllerComponent.ControllerInterface
 import de.htwg.se.connect4.controller.controllerComponent.controllerBaseImpl.State
 import de.htwg.se.connect4.model.boardComponent.{BoardInterface, CellInterface}
 import de.htwg.se.connect4.model.fileIoComponent.FileIoInterface
+import de.htwg.se.connect4.util.Observer
 import javax.inject.{Inject, Singleton}
 import play.api.libs.json.{JsNumber, JsString, Json, Writes}
-import play.api.mvc.{Action, AnyContent, BaseController, ControllerComponents, Request}
+import play.api.mvc.{AbstractController, Action, AnyContent, BaseController, ControllerComponents, Request, WebSocket}
 import play.mvc.Results.redirect
 import play.twirl.api.Html
+import akka.actor._
+import akka.stream.Materializer
+import play.api.Play.materializer
+import play.api.libs.streams.ActorFlow
+
+
 
 @Singleton
-class GameController @Inject()(val controllerComponents: ControllerComponents) extends BaseController {
-  var gameIdx : Int = 0
-  var games : Map[Int, (ControllerInterface, Tui)] = Map.empty[Int, (ControllerInterface, Tui)]
+class GameController (cc: ControllerComponents) (implicit system : ActorSystem, mat: Materializer) extends AbstractController(cc) {
+  val injector = Guice.createInjector(new Connect4Module)
+  val controller = injector.getInstance(classOf[ControllerInterface])
+  object Connect4WebSocketActorFactory {
+    def create(out: ActorRef) = {
+      val actor = new Connect4WebSocketActor(out)
+      controller.add(actor)
+      Props(actor)
+    }
+  }
+
+
 
   /**
    * Create an Action to render an HTML page.
@@ -25,6 +42,7 @@ class GameController @Inject()(val controllerComponents: ControllerComponents) e
    * will be called when the application receives a `GET` request with
    * a path of `/`.
    */
+    /*
   def handle(idx : Int): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
 
     val tuple = games(idx)
@@ -41,7 +59,7 @@ class GameController @Inject()(val controllerComponents: ControllerComponents) e
       Ok(views.html.connect4.render(controller,idx))
   }
   }
-
+ */
   implicit val cellWrites = new Writes[CellInterface] {
     def writes(cell: CellInterface) = Json.obj(
       "isSet" -> cell.isSet,
@@ -50,19 +68,13 @@ class GameController @Inject()(val controllerComponents: ControllerComponents) e
     )
   }
 
-  def setCol(idx: Int, col : Int) = Action { implicit request : Request[AnyContent] =>
-    val tuple = games(idx)
-    val tui = tuple._2
-    val controller = tuple._1
+  def setCol(col : Int) = Action { implicit request : Request[AnyContent] =>
     controller.setCol(col)
-    val json = controllerToJson(controller)
+    val json = controllerToJson()
     Ok(json)
   }
-
-  def initGame(idx : Int)  = Action { implicit request: Request[AnyContent] =>
-    val tuple = games(idx)
-    val tui = tuple._2
-    val controller = tuple._1
+ /* SHOULD BE DONE IN LOBBY
+  def initGame()  = Action { implicit request: Request[AnyContent] =>
     val body: AnyContent = request.body
     val input = body.asFormUrlEncoded.get("inputField").map(_.toString)
     tui.processInputLine(input.head, controller.getBoard)
@@ -91,45 +103,33 @@ class GameController @Inject()(val controllerComponents: ControllerComponents) e
     Ok(views.html.connect4.render(controller,idx))
 
   }
-
-  def restartGame(idx : Int) = Action { implicit request : Request[AnyContent] =>
-    val tuple = games(idx)
-    val tui = tuple._2
-    val controller = tuple._1
+*/
+  def restartGame() {
     controller.createNewBoard(controller.sizeOfRows, controller.sizeOfCols)
-    Ok(views.html.connect4.render(controller,idx))
+   //TODO: send new state to client
   }
 
-  def undoTurn(idx : Int) = Action { implicit request : Request[AnyContent] =>
-    val tuple = games(idx)
-    val tui = tuple._2
-    val controller = tuple._1
+  def undoTurn()  {
     controller.undo()
-    Ok(views.html.connect4.render(controller,idx))
+    //TODO: send new state to client
   }
 
-  def redoTurn(idx : Int) = Action { implicit request : Request[AnyContent] =>
-    val tuple = games(idx)
-    val tui = tuple._2
-    val controller = tuple._1
+  def redoTurn()  {
     controller.redo
-    Ok(views.html.connect4.render(controller,idx))
+    //TODO: send new state to client
   }
 
-  def quitGame(idx: Int) = Action { implicit request : Request[AnyContent] =>
-    games -= (idx)
+  def quitGame(){
+    //TODO: checkout after Lobby implemention
     Redirect(s"/games")
   }
 
-  def getJson(idx: Int)  = Action { implicit request : Request[AnyContent] =>
-    val game = games(idx)
-    val controller = game._1
-    val stateToSave = State(controller.getCurrentPlayerIndex, controller.getPlayers, controller.getState.toString())
-    val json = controllerToJson(controller)
+  def getJson()  = Action { implicit request : Request[AnyContent] =>
+    val json = controllerToJson()
     Ok(json)
   }
 
-  def controllerToJson(controller: ControllerInterface) = {
+  def controllerToJson() = {
     val board = controller.getBoard
     val state = State(controller.getCurrentPlayerIndex, controller.getPlayers, controller.getState.toString())
     Json.obj(
@@ -167,7 +167,17 @@ class GameController @Inject()(val controllerComponents: ControllerComponents) e
     )
   }
 
+  def socket = WebSocket.accept[String,String] { request =>
+    ActorFlow.actorRef {
+      out => Connect4WebSocketActorFactory.create(out)
+    }
+  }
 
+class Connect4WebSocketActor(out : ActorRef) extends Actor with Observer {
+  override def receive: Receive = ???
+
+  override def update: Unit = ???
+}
 
 
 }
