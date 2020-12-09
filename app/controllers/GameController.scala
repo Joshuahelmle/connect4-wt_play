@@ -10,13 +10,15 @@ import de.htwg.se.connect4.model.boardComponent.{BoardInterface, CellInterface}
 import de.htwg.se.connect4.model.fileIoComponent.FileIoInterface
 import de.htwg.se.connect4.util.Observer
 import javax.inject.{Inject, Singleton}
-import play.api.libs.json.{JsNumber, JsString, Json, Writes}
+import play.api.libs.json._
+import play.api.libs.functional.syntax._
 import play.api.mvc.{AbstractController, Action, AnyContent, BaseController, ControllerComponents, Request, WebSocket}
 import play.mvc.Results.redirect
 import play.twirl.api.Html
 import akka.actor._
 import akka.stream.Materializer
 import play.api.Play.materializer
+import play.api.libs.json
 import play.api.libs.streams.ActorFlow
 
 
@@ -27,9 +29,7 @@ class GameController (cc: ControllerComponents) (implicit system : ActorSystem, 
   val controller = injector.getInstance(classOf[ControllerInterface])
   object Connect4WebSocketActorFactory {
     def create(out: ActorRef) = {
-      val actor = new Connect4WebSocketActor(out)
-      controller.add(actor)
-      Props(actor)
+      Props(new Connect4WebSocketActor(out))
     }
   }
 
@@ -174,9 +174,34 @@ class GameController (cc: ControllerComponents) (implicit system : ActorSystem, 
   }
 
 class Connect4WebSocketActor(out : ActorRef) extends Actor with Observer {
-  override def receive: Receive = ???
+  controller.add(this)
+  override def receive: Receive = {
+    case msg: String =>
+      println(msg)
+      val json: JsValue = Json.parse(msg)
+      val _type = (json \ "_type").as[String]
+      val _msg = (json \ "_msg").as[String]
+      _type match {
+        case "playTurn" => {
+          val _col = (json \ "_col").as[Int]
+          controller.setCol(_col)
+        }
+        case "undo" => controller.undo
+        case "redo" => controller.redo
+        case "quit" => {
 
-  override def update: Unit = ???
+          out ! ("quitGame")
+        }
+        case "restart" => restartGame()
+        case _ => println("default case")
+
+      }
+
+  }
+
+  override def update = {
+    out ! ("done")
+  }
 }
 
 

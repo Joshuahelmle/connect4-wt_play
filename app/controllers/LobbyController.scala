@@ -1,5 +1,7 @@
 package controllers
 
+import akka.actor.ActorSystem
+import akka.stream.Materializer
 import com.google.inject.{Guice, Injector}
 import de.htwg.se.connect4.Connect4Module
 import de.htwg.se.connect4.aview.Tui
@@ -9,12 +11,12 @@ import de.htwg.se.connect4.model.boardComponent.{BoardInterface, CellInterface}
 import de.htwg.se.connect4.model.fileIoComponent.FileIoInterface
 import javax.inject.{Inject, Singleton}
 import play.api.libs.json.{JsNumber, JsString, Json, Writes}
-import play.api.mvc.{Action, AnyContent, BaseController, ControllerComponents, Request}
+import play.api.mvc.{Action, AnyContent, BaseController, ControllerComponents, Request, WebSocket}
 import play.mvc.Results.redirect
 import play.twirl.api.Html
 
 @Singleton
-class LobbyController @Inject()(val controllerComponents: ControllerComponents) extends BaseController {
+class LobbyController @Inject()(val controllerComponents: ControllerComponents) (implicit system : ActorSystem, mat: Materializer) extends BaseController {
 
   var games : Map[Int, GameController] = Map.empty[Int, GameController]
   var gameIdx = 0
@@ -51,6 +53,11 @@ class LobbyController @Inject()(val controllerComponents: ControllerComponents) 
   def getJson(idx: Int) = Action { implicit request: Request[AnyContent] =>
     val game = games(idx)
     Ok(game.controllerToJson())
+  }
+
+  def openSocket(idx: Int)   = {
+    val game = games(idx)
+    game.socket
   }
 
 }
