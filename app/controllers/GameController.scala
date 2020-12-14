@@ -1,25 +1,17 @@
 package controllers
 
 import akka.actor._
-import com.google.inject.{Guice, Injector}
+import akka.stream.Materializer
+import com.google.inject.Guice
 import de.htwg.se.connect4.Connect4Module
-import de.htwg.se.connect4.aview.Tui
 import de.htwg.se.connect4.controller.controllerComponent.ControllerInterface
 import de.htwg.se.connect4.controller.controllerComponent.controllerBaseImpl.State
-import de.htwg.se.connect4.model.boardComponent.{BoardInterface, CellInterface}
-import de.htwg.se.connect4.model.fileIoComponent.FileIoInterface
+import de.htwg.se.connect4.model.boardComponent.CellInterface
 import de.htwg.se.connect4.util.Observer
-import javax.inject.{Inject, Singleton}
+import javax.inject.Singleton
 import play.api.libs.json._
-import play.api.libs.functional.syntax._
-import play.api.mvc.{AbstractController, Action, AnyContent, BaseController, ControllerComponents, Request, WebSocket}
-import play.mvc.Results.redirect
-import play.twirl.api.Html
-import akka.actor._
-import akka.stream.Materializer
-import play.api.Play.materializer
-import play.api.libs.json
 import play.api.libs.streams.ActorFlow
+import play.api.mvc._
 
 
 
@@ -42,24 +34,7 @@ class GameController (cc: ControllerComponents) (implicit system : ActorSystem, 
    * will be called when the application receives a `GET` request with
    * a path of `/`.
    */
-    /*
-  def handle(idx : Int): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
 
-    val tuple = games(idx)
-    val tui = tuple._2
-    val controller = tuple._1
-
-    if (controller.getPlayers.size == 0){
-      val html = views.html.connect4.render(controller,idx)
-      Ok(html)
-    } else {
-      val body: AnyContent = request.body
-      val input = body.asFormUrlEncoded.get("inputField").map(_.toString)
-      tui.processInputLine(input.head, controller.getBoard)
-      Ok(views.html.connect4.render(controller,idx))
-  }
-  }
- */
   implicit val cellWrites = new Writes[CellInterface] {
     def writes(cell: CellInterface) = Json.obj(
       "isSet" -> cell.isSet,
@@ -73,37 +48,7 @@ class GameController (cc: ControllerComponents) (implicit system : ActorSystem, 
     val json = controllerToJson()
     Ok(json)
   }
- /* SHOULD BE DONE IN LOBBY
-  def initGame()  = Action { implicit request: Request[AnyContent] =>
-    val body: AnyContent = request.body
-    val input = body.asFormUrlEncoded.get("inputField").map(_.toString)
-    tui.processInputLine(input.head, controller.getBoard)
-    Redirect(s"/games/$idx")
-  }
 
-  def newGame() = Action {implicit request : Request[AnyContent] =>
-    val injector = Guice.createInjector(new Connect4Module)
-    val controller = injector.getInstance(classOf[ControllerInterface])
-    val tui = new Tui(controller)
-    games += (gameIdx -> (controller,tui))
-    print(games)
-    val oldIdx = gameIdx
-    gameIdx += 1
-    Redirect(s"/games/$oldIdx")
-  }
-
-  def index() = Action { implicit request : Request[AnyContent] =>
-    Ok(views.html.games(games))
-  }
-
-  def getGame(idx : Int) = Action { implicit request : Request[AnyContent] =>
-    val tuple = games(idx)
-    val tui = tuple._2
-    val controller = tuple._1
-    Ok(views.html.connect4.render(controller,idx))
-
-  }
-*/
   def restartGame() {
     controller.createNewBoard(controller.sizeOfRows, controller.sizeOfCols)
    //TODO: send new state to client

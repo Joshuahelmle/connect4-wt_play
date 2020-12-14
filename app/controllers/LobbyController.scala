@@ -2,18 +2,8 @@ package controllers
 
 import akka.actor.ActorSystem
 import akka.stream.Materializer
-import com.google.inject.{Guice, Injector}
-import de.htwg.se.connect4.Connect4Module
-import de.htwg.se.connect4.aview.Tui
-import de.htwg.se.connect4.controller.controllerComponent.ControllerInterface
-import de.htwg.se.connect4.controller.controllerComponent.controllerBaseImpl.State
-import de.htwg.se.connect4.model.boardComponent.{BoardInterface, CellInterface}
-import de.htwg.se.connect4.model.fileIoComponent.FileIoInterface
 import javax.inject.{Inject, Singleton}
-import play.api.libs.json.{JsNumber, JsString, Json, Writes}
-import play.api.mvc.{Action, AnyContent, BaseController, ControllerComponents, Request, WebSocket}
-import play.mvc.Results.redirect
-import play.twirl.api.Html
+import play.api.mvc.{AnyContent, BaseController, ControllerComponents, Request}
 
 @Singleton
 class LobbyController @Inject()(val controllerComponents: ControllerComponents) (implicit system : ActorSystem, mat: Materializer) extends BaseController {

@@ -2,10 +2,7 @@ package controllers
 
 import com.google.inject.Guice
 import de.htwg.se.connect4.Connect4Module
-import de.htwg.se.connect4.aview.Tui
 import de.htwg.se.connect4.controller.controllerComponent.ControllerInterface
-import de.htwg.se.connect4.model.boardComponent.BoardInterface
-import de.htwg.se.connect4.model.boardComponent.boardBaseImpl.Color
 import javax.inject.{Inject, Singleton}
 import play.api.mvc.{AnyContent, BaseController, ControllerComponents, Request}
 
