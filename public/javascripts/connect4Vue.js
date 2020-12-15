@@ -3,20 +3,21 @@ let boardCols = [col(0), col(1), col(2), col(3), col(4), col(5), col(6)]
 
 let buttons = [{text: "Restart Game",id: "btn_restart"}, {text: "Quit Game", id: "btn_quit"}, {text: "Save Game", id: "btn_save"}, {text: "Undo", id: "btn_undo"}, {text: "Redo", id: "btn_redo"}];
 
-function row(rowNumber) {
-    let rows = [];
-        for (let col = 0; col < 7; col++) {
-            rows.push({row: rowNumber, col: col})
-        }
-
+function row() {
+    let rows = []
+    for (let row = 0; row < 6; row++) {
+        rows.push({row: row})
+    }
     return rows
 }
 
-function col(colNumber) {
-    let cols = [];
-    for (let row = 0; row < 6; row++) {
-        cols.push({row: row, column: colNumber})
+function col() {
+    let cols = []
+    for (let col = 0; col < 7; col++) {
+        cols.push({col: col})
+
     }
+
 
     return cols;
 
@@ -55,15 +56,19 @@ Vue.component('board', {
     template: `
             <div class="board">
                 <div v-for="boardRow in rows" class="boardrow">
-                    <div v-for="colRow in cols" class="cell unset" v-bind:id="boardRow.row - boardRow.col"></div>
+                    <div v-for="boardCol in cols" v-bind:id=" 'row-' + boardRow.row + '-' + 'col-' + boardCol.col" class="cell unset" ></div>
                 </div>
             </div>
     `,
     data: function () {
+        console.log("row:", row())
+        console.log("col:", col())
         return {
-            rows: boardRows,
-            cols: boardCols
+            rows: row(),
+            cols: col(),
+            buttons: buttons
         }
+
     },
 
 });
