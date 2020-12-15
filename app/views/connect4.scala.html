@@ -28,7 +28,7 @@
                 <input type="submit" value="Submit">
             </form>
         } else {
-            <div class="list-group list-group-horizontal">
+          <div class="list-group list-group-horizontal">
                 <button id="btn_restart" class="btn btn-primary list-group-item list-group-item-action">
                    Restart Game
                 </button>
@@ -37,14 +37,15 @@
                 <button id="btn_undo" class="btn btn-primary list-group-item list-group-item-action flex-fill">Undo</button>
                 <button id="btn_redo" class="btn btn-primary list-group-item list-group-item-action flex-fill">Redo</button>
             </div>
-        <div class="board">
+       <!-- <div class="board">
             @for(row <- 0 until controller.sizeOfRows) {
                 <div class="boardrow">
                 @for(col <- 0 until controller.sizeOfCols) {
                     <span id="cell-row-@row-col-@col" class="cell unset" onclick="turn(@id, @col)" onmouseenter="zoomIn(@col, @id)" onmouseleave="zoomOut(@id)"></span>
                 } </div>
             }
-        </div>
+        </div> -->
+    <board></board>
 
        <!-- <div> @{if(controller.getState.toString().equals("InGameState")) {controller.getPlayerDemandString} else {controller.stateString}}</div>
         <form action="/games/@id" method="post">
