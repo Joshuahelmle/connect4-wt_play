@@ -1,6 +1,7 @@
 let boardRows = [row(0), row(1), row(2), row(3), row(4), row(5)];
 let boardCols = [col(0), col(1), col(2), col(3), col(4), col(5), col(6)]
 
+let buttons = [{text: "Restart Game",id: "btn_restart"}, {text: "Quit Game", id: "btn_quit"}, {text: "Save Game", id: "btn_save"}, {text: "Undo", id: "btn_undo"}, {text: "Redo", id: "btn_redo"}];
 
 function row(rowNumber) {
     let rows = [];
@@ -31,6 +32,22 @@ $(document).ready(function () {
 
 
 });
+
+
+Vue.component('buttongroup', {
+    template: `
+            <div class="list-group list-group-horizontal"> 
+            <button v-for="button in buttons" v-bind:id="button.id" class="btn btn-primary list-group-item list-group-item-action flex-fill"> {{button.text }} </button>
+            </div>
+    `,
+    data: function () {
+        return {
+            buttons: buttons
+        }
+    },
+
+});
+
 
 
 
