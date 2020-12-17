@@ -28,6 +28,11 @@ body {
 
 }
 
+.btn-group-above {
+    width: 80%;
+    margin: auto;
+}
+
 .board {
     background-image: url("../images/wood_background.jpeg");
     width: 80%;

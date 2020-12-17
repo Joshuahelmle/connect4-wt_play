@@ -36,7 +36,7 @@ $(document).ready(function () {
 
 Vue.component('buttongroup', {
     template: `
-            <div class="list-group list-group-horizontal"> 
+            <div class="list-group list-group-horizontal btn-group-above"> 
             <button v-for="button in buttons" v-bind:id="button.id" class="btn btn-primary list-group-item list-group-item-action flex-fill"> {{button.text }} </button>
             </div>
     `,
