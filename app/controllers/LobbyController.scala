@@ -76,7 +76,26 @@ class LobbyController @Inject()(val controllerComponents: ControllerComponents) 
     )
   }
 
-  def createGame() = {
+  def createNewGame(player1: String, player2: String) {
+    val game = new GameController(controllerComponents)
+
+    games += (gameIdx -> game)
+    print(games)
+    val oldIdx = gameIdx
+    gameIdx += 1
+
+  }
+
+  def createGame(player1:String, player2:String) = {
+    createNewGame(player1, player2)
+
+    Json.obj(
+      "game" -> Json.toJson(
+          Json.obj(
+            "test" -> "test"
+          )
+      )
+    )
 
   }
 
@@ -95,7 +114,11 @@ class LobbyController @Inject()(val controllerComponents: ControllerComponents) 
           val _type = (msg \ "_type").as[String]
           _type match {
             case "getGames" => out ! getGames
-            case "createGame" => out ! createGame
+            case "createGame" => {
+              val player1 = (msg \ "player1").as[String]
+              val player2 = (msg \ "player2").as[String]
+              out ! createGame(player1, player2)
+            }
       }
 
     }
