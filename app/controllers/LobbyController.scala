@@ -84,6 +84,10 @@ class LobbyController @Inject()(val controllerComponents: ControllerComponents) 
     val oldIdx = gameIdx
     gameIdx += 1
 
+    val currentGame = games(oldIdx)
+    currentGame.controller.addPlayer(player1)
+    currentGame.controller.addPlayer(player2)
+
   }
 
   def createGame(player1:String, player2:String) = {
